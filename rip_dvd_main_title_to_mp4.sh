@@ -1,6 +1,8 @@
 #!/bin/sh
 
-HandBrakeCLI --version > /dev/null 2>&1
+# (c)2018 Brian Sidebotham <brian.sidebotham@gmail.com>
+
+which HandBrakeCLI > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
     printf "%s" "HandBrakeCLI is required. Go to https://handbrake.fr to download it for your platform" >&2
@@ -13,7 +15,7 @@ if [ $# -lt 1 ]; then
 fi
 
 # Get the input arguments
-output="$1"
+output=$1
 
 handbrake_version=$(HandBrakeCLI --version 2>&1 | grep -E "HandBrake [0-9]+")
 printf "%s\n" "Using ${handbrake_version}"
@@ -88,8 +90,8 @@ handbrake_options="${handbrake_options} --subtitle-forced"
 #handbrake_options="${handbrake_options} --two-pass"
 handbrake_options="${handbrake_options} --no-two-pass"
 
-command="HandBrakeCLI ${handbrake_options} -o \"${output}\""
+command="HandBrakeCLI ${handbrake_options}"
 
 printf "%s\n" "Using command: ${command}"
 
-${command}
+${command} -o "${output}.mp4"
