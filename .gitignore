@@ -2,3 +2,7 @@
 !.gitignore
 build
 *.mp4
+ssl-certificates/*.key
+ssl-certificates/*.csr
+ssl-certificates/*.crt
+ssl-certificates/*.srl

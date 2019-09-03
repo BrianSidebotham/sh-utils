@@ -11,13 +11,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-if [ $# -lt 1 ]; then
-    printf "%s\n" "$0 output_filename.mp4" >&2
+if [ $# -lt 2 ]; then
+    printf "%s\n" "$0 track_number output_filename" >&2
     exit 1
 fi
 
 # Get the input arguments
-output=$1
+title=$1
+output=$2
 
 handbrake_version=$(HandBrakeCLI --version 2>&1 | grep -E "HandBrake [0-9]+")
 printf "%s\n" "Using ${handbrake_version}"
@@ -31,7 +32,8 @@ handbrake_options="${handbrake_options} --input /dev/dvd"
 
 # Track selection
 # TODO: Fill out more options
-handbrake_options="${handbrake_options} --main-feature"
+#handbrake_options="${handbrake_options} --main-feature"
+handbrake_options="${handbrake_options} --title ${title}"
 
 # Encoders to use
 # Video
@@ -83,13 +85,6 @@ handbrake_options="${handbrake_options} -Eav_aac"
 # Audio Quality
 # handbrake_options="${handbrake_options} -B 128"
 handbrake_options="${handbrake_options} -B 192"
-
-# Language handbrake_options
-handbrake_options="${handbrake_options} --native-language eng"
-#handbrake_options="${handbrake_options} --native-language fre"
-
-# Use the audio track that matches the native-language setting rather than the first audio track
-handbrake_options="${handbrake_options} --native-dub"
 
 # Apply dynamic compression of the audio to enable softer sounds being louder!
 handbrake_options="${handbrake_options} --drc 2.5"
