@@ -41,17 +41,3 @@ Also add it so that Firefox and Chrome recongnise the CA:
 sudo cp ./rootca.crt /usr/share/ca-certificates/
 sudo dpkg-reconfigure ca-certificates
 ```
-
-## Using the certificates
-
-Some things are fussy:
-
-## Ubiquiti Unifi Controllers
-
-It is required (believe it or not) to make all certificates single line certificates (remove all of the line breaks
-in the cert file). You need the `rootca.crt` and `whatever.wherever.crt` certs to import into the unifi controller like
-so:
-
-```
-java -jar lib/ace.jar import_cert /root/unifi.int.bjs.crt /root/wc.int.bjs.crt
-```
