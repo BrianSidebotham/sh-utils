@@ -73,7 +73,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Generating Certificate"
+echo "INFO: CSR Info:"
+openssl req -in ${domain}.csr -noout -text
+
+echo "INFO: Generating Certificate"
 openssl x509 -req -in ${domain}.csr \
     -CA rootca.crt -CAkey rootca.key -CAcreateserial \
     -extfile ${opensslconfig} \
