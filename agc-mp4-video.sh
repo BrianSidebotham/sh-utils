@@ -20,5 +20,5 @@ fi
 
 # Because I'm hard of hearing (not literally, but the dynamic range on these movies makes it impossible to listen to
 # them at a normal volume!) we apply an automatic gain control to bring up the low level sounds and compress the high
-# level sounds.
+# level sounds. This form is a bit agressive and can sound a little odd. Works well for the film Oblivion.
 ffmpeg -i "${input}" -af 'compand=0|0:1|1:-90/-900|-70/-70|-30/-9|0/-3:6:0:0:0' -c:v copy -c:a aac -b:a 192k "${output}"
