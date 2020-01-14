@@ -35,6 +35,9 @@ handbrake_options="${handbrake_options} --input /dev/dvd"
 #handbrake_options="${handbrake_options} --main-feature"
 handbrake_options="${handbrake_options} --title ${title}"
 
+# Choose whether or not to use libdvdnav which can be tripped up by some copy protection schemes
+handbrake_options="${handbrake_options} --no-dvdnav"
+
 # Encoders to use
 # Video
 handbrake_options="${handbrake_options} -ex264"
