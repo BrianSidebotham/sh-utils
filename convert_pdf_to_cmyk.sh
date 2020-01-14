@@ -17,7 +17,7 @@ pdf=${1}
 which gs > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
-    echo "ERORR: Require Ghostscript to do the colourspace conversion (gs)" >&2
+    echo "ERROR: Require Ghostscript to do the colourspace conversion (gs)" >&2
     exit 1
 fi
 
