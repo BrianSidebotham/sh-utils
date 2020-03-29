@@ -4,6 +4,12 @@
 
 scriptdir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
+# On Fedora Core 31 you'll need to install HandBrake CLI and install the DVD Decryption library too:
+#     dnf install HandBrake
+# Go and download the libdvdcss rpm: https://fedora.pkgs.org/31/cheese-x86_64/libdvdcss-1.4.2-2.fc31.x86_64.rpm.html'
+# Install it:
+#     dnf install ~/Downloads/libdvdcss-1.4.2.fc31.x86_64.rpm
+
 which HandBrakeCLI > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
@@ -27,7 +33,8 @@ handbrake_options=""
 
 # Source of the video
 # # TODO: Fill out more options
-handbrake_options="${handbrake_options} --input /dev/dvd"
+
+handbrake_options="${handbrake_options} --input /dev/sr0"
 
 # Track selection
 # TODO: Fill out more options

@@ -28,7 +28,7 @@ handbrake_options=""
 
 # Source of the video
 # # TODO: Fill out more options
-handbrake_options="${handbrake_options} --input /dev/dvd"
+handbrake_options="${handbrake_options} --input /dev/sr0"
 
 # Track selection
 # TODO: Fill out more options
@@ -93,6 +93,9 @@ handbrake_options="${handbrake_options} -B 192"
 handbrake_options="${handbrake_options} --drc 2.5"
 handbrake_options="${handbrake_options} --mixdown stereo"
 
+# Best to deinterlace of course!
+handbrake_options="${handbrake_options} --deinterlace"
+
 # Use subtitles when they're forced
 handbrake_options="${handbrake_options} --subtitle-forced"
 
@@ -108,6 +111,6 @@ printf "%s\n" "Using command: ${command}"
 ${command} -o "${output}.mp4"
 
 # Adjust the film's audio track to make sure we get a good copy of the audio that I can actually hear!
-if [ -f ${scriptdir}/agc-mp4-video.sh ]; then
-    ./agc-mp4-video.sh "${output}.mp4" "${output}-agc.mp4"
-fi
+#if [ -f ${scriptdir}/agc-mp4-video.sh ]; then
+#    ./agc-mp4-video.sh "${output}.mp4" "${output}-agc.mp4"
+#fi

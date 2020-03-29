@@ -35,9 +35,20 @@ Info about the ca:
 certutil -d sql:$HOME/.pki/nssdb -L <nickname of cert>
 ```
 
-Also add it so that Firefox and Chrome recongnise the CA:
+Also add it so that Firefox and Chrome recognise the CA:
+
+**Linux Mint:**
 
 ```
 sudo cp ./rootca.crt /usr/share/ca-certificates/
 sudo dpkg-reconfigure ca-certificates
+```
+
+**Fedora**
+
+See https://docs.fedoraproject.org/en-US/quick-docs/using-shared-system-certificates/ for further information
+
+```
+sudo cp ./rootca.crt /usr/share/pki/ca-trust-source/anchors
+sudo update-ca-trust
 ```
