@@ -103,8 +103,9 @@ handbrake_options="${handbrake_options} --drc 2.5"
 handbrake_options="${handbrake_options} --mixdown stereo"
 
 # Use subtitles when they're forced
+handbrake_options="${handbrake_options} --subtitle scan"
 handbrake_options="${handbrake_options} --subtitle-forced"
-
+handbrake_options="${handbrake_options} --subtitle-burned"
 
 # Two pass mode or not?
 #handbrake_options="${handbrake_options} --two-pass"

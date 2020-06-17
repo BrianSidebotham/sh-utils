@@ -97,7 +97,9 @@ handbrake_options="${handbrake_options} --mixdown stereo"
 handbrake_options="${handbrake_options} --deinterlace"
 
 # Use subtitles when they're forced
+handbrake_options="${handbrake_options} --subtitle scan"
 handbrake_options="${handbrake_options} --subtitle-forced"
+handbrake_options="${handbrake_options} --subtitle-burned"
 
 
 # Two pass mode or not?
