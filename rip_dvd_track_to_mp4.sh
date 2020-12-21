@@ -28,7 +28,13 @@ handbrake_options=""
 
 # Source of the video
 # # TODO: Fill out more options
-handbrake_options="${handbrake_options} --input /dev/sr0"
+dvddrive=$(cat /proc/sys/dev/cdrom/info | grep "drive name" | cut -d':' -f 2 | tr -d '[:blank:]')
+if [ "${dvddrive}X" = "X"]; then
+    echo "Cannot detect a DVD drive under /proc/sys/dev/cdrom" >&2
+    exit 1
+fi
+
+handbrake_options="${handbrake_options} --input /dev/${dvddrive}"
 
 # Track selection
 # TODO: Fill out more options

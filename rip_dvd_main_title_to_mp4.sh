@@ -14,6 +14,7 @@ which HandBrakeCLI > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
     printf "%s" "HandBrakeCLI is required. Go to https://handbrake.fr to download it for your platform" >&2
+    printf "%s" "Fedora: dnf install -y handbrake && dnf install -y http://www.nosuchhost.net/~cheese/fedora/packages/33/x86_64/libdvdcss-1.4.2-2.fc33.x86_64.rpm" >&2
     exit 1
 fi
 
@@ -33,8 +34,13 @@ handbrake_options=""
 
 # Source of the video
 # # TODO: Fill out more options
+dvddrive=$(cat /proc/sys/dev/cdrom/info | grep "drive name" | cut -d':' -f 2 | tr -d '[:blank:]')
+if [ "${dvddrive}X" = "X"]; then
+    echo "Cannot detect a DVD drive under /proc/sys/dev/cdrom" >&2
+    exit 1
+fi
 
-handbrake_options="${handbrake_options} --input /dev/sr0"
+handbrake_options="${handbrake_options} --input /dev/${dvddrive}"
 
 # Track selection
 # TODO: Fill out more options
@@ -86,6 +92,9 @@ handbrake_options="${handbrake_options} -Eav_aac"
 #handbrake_options="${handbrake_options} -Ecopy:flac"
 #handbrake_options="${handbrake_options} -Eopus"
 #handbrake_options="${handbrake_options} -Ecopy"
+
+# Best to deinterlace of course!
+handbrake_options="${handbrake_options} --deinterlace"
 
 # Audio Quality
 # handbrake_options="${handbrake_options} -B 128"
