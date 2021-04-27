@@ -4,21 +4,27 @@
 
 scriptdir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
+# On Fedora Core 31 you'll need to install HandBrake CLI and install the DVD Decryption library too:
+#     dnf install HandBrake
+# Go and download the libdvdcss rpm: https://fedora.pkgs.org/31/cheese-x86_64/libdvdcss-1.4.2-2.fc31.x86_64.rpm.html'
+# Install it:
+#     dnf install ~/Downloads/libdvdcss-1.4.2.fc31.x86_64.rpm
+
 which HandBrakeCLI > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
     printf "%s" "HandBrakeCLI is required. Go to https://handbrake.fr to download it for your platform" >&2
+    printf "%s" "Fedora: dnf install -y handbrake && dnf install -y http://www.nosuchhost.net/~cheese/fedora/packages/33/x86_64/libdvdcss-1.4.2-2.fc33.x86_64.rpm" >&2
     exit 1
 fi
 
-if [ $# -lt 2 ]; then
-    printf "%s\n" "$0 track_number output_filename" >&2
+if [ $# -lt 1 ]; then
+    printf "%s\n" "$0 output_filename.mp4" >&2
     exit 1
 fi
 
 # Get the input arguments
-title=$1
-output=$2
+output=$1
 
 handbrake_version=$(HandBrakeCLI --version 2>&1 | grep -E "HandBrake [0-9]+")
 printf "%s\n" "Using ${handbrake_version}"
@@ -29,7 +35,7 @@ handbrake_options=""
 # Source of the video
 # # TODO: Fill out more options
 dvddrive=$(cat /proc/sys/dev/cdrom/info | grep "drive name" | cut -d':' -f 2 | tr -d '[:blank:]')
-if [ "${dvddrive}X" = "X"]; then
+if [ "${dvddrive}X" = "X" ]; then
     echo "Cannot detect a DVD drive under /proc/sys/dev/cdrom" >&2
     exit 1
 fi
@@ -38,11 +44,7 @@ handbrake_options="${handbrake_options} --input /dev/${dvddrive}"
 
 # Track selection
 # TODO: Fill out more options
-#handbrake_options="${handbrake_options} --main-feature"
-handbrake_options="${handbrake_options} --title ${title}"
-
-# Choose whether or not to use libdvdnav which can be tripped up by some copy protection schemes
-handbrake_options="${handbrake_options} --no-dvdnav"
+handbrake_options="${handbrake_options} --main-feature"
 
 # Encoders to use
 # Video
@@ -91,22 +93,28 @@ handbrake_options="${handbrake_options} -Eav_aac"
 #handbrake_options="${handbrake_options} -Eopus"
 #handbrake_options="${handbrake_options} -Ecopy"
 
+# Best to deinterlace of course!
+handbrake_options="${handbrake_options} --deinterlace"
+
 # Audio Quality
 # handbrake_options="${handbrake_options} -B 128"
 handbrake_options="${handbrake_options} -B 192"
+
+# Language handbrake_options
+handbrake_options="${handbrake_options} --native-language eng"
+#handbrake_options="${handbrake_options} --native-language fre"
+
+# Use the audio track that matches the native-language setting rather than the first audio track
+handbrake_options="${handbrake_options} --native-dub"
 
 # Apply dynamic compression of the audio to enable softer sounds being louder!
 handbrake_options="${handbrake_options} --drc 2.5"
 handbrake_options="${handbrake_options} --mixdown stereo"
 
-# Best to deinterlace of course!
-handbrake_options="${handbrake_options} --deinterlace"
-
 # Use subtitles when they're forced
 handbrake_options="${handbrake_options} --subtitle scan"
 handbrake_options="${handbrake_options} --subtitle-forced"
 handbrake_options="${handbrake_options} --subtitle-burned"
-
 
 # Two pass mode or not?
 #handbrake_options="${handbrake_options} --two-pass"
@@ -119,6 +127,6 @@ printf "%s\n" "Using command: ${command}"
 ${command} -o "${output}.mp4"
 
 # Adjust the film's audio track to make sure we get a good copy of the audio that I can actually hear!
-#if [ -f ${scriptdir}/agc-mp4-video.sh ]; then
-#    ./agc-mp4-video.sh "${output}.mp4" "${output}-agc.mp4"
-#fi
+if [ -f ${scriptdir}/agc-mp4-video.sh ]; then
+    ./agc-mp4-video.sh "${output}.mp4" "${output}-agc.mp4"
+fi

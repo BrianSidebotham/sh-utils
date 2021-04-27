@@ -11,4 +11,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-HandBrakeCLI --input /dev/sr0 --title 0 2>&1 | grep -A2 '+ title'
+HandBrakeCLI --input /dev/sr0 --title 0 2>&1 | grep -A3 '+ title'
